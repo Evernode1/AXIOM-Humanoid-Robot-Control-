@@ -1,0 +1,66 @@
+version: '3.9'
+
+# AXIOM Humanoid Control Subnet — Full Stack
+# Run all services: docker-compose up -d
+# Logs:            docker-compose logs -f
+# Stop:            docker-compose down
+
+services:
+
+  # ── Next.js Frontend ──────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_FIREBASE_API_KEY=${FIREBASE_API_KEY}
+      - NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${FIREBASE_AUTH_DOMAIN}
+      - NEXT_PUBLIC_FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}
+      - NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=${FIREBASE_STORAGE_BUCKET}
+      - NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${FIREBASE_MESSAGING_SENDER_ID}
+      - NEXT_PUBLIC_FIREBASE_APP_ID=${FIREBASE_APP_ID}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ── Miner ─────────────────────────────────────────────────────────────
+  miner:
+    build:
+      context: ./miner
+      dockerfile: Dockerfile
+    environment:
+      - KNX_MNEMONIC=${KNX_MNEMONIC}
+      - KNX_RPC=${KNX_RPC:-wss://testnet-rpc1.konnex.world:39944}
+      - KNX_SUBNET_ID=${KNX_SUBNET_ID:-4}
+      - KNX_POLL_S=${KNX_POLL_S:-8}
+    restart: unless-stopped
+    depends_on:
+      - frontend
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ── Validator ─────────────────────────────────────────────────────────
+  validator:
+    build:
+      context: ./validator
+      dockerfile: Dockerfile
+    environment:
+      - KNX_MNEMONIC=${KNX_VALIDATOR_MNEMONIC}
+      - KNX_RPC=${KNX_RPC:-wss://testnet-rpc1.konnex.world:39944}
+      - KNX_SUBNET_ID=${KNX_SUBNET_ID:-4}
+      - KNX_POLL_S=${KNX_POLL_S:-6}
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

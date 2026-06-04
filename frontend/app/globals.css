@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;600;800&display=swap');
+
+:root {
+  --bg:      #020408;
+  --bg2:     #060C12;
+  --bg3:     #0A1218;
+  --cyan:    #00E5FF;
+  --teal:    #00FFB2;
+  --amber:   #FFB547;
+  --red:     #FF3D5A;
+  --purple:  #B794F4;
+  --green:   #4ADE80;
+  --dim:     #1A2530;
+  --muted:   #3A5060;
+  --text:    #C8E0E8;
+  --textdim: #5A7080;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Exo 2', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Scanline */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,229,255,0.015) 2px, rgba(0,229,255,0.015) 3px);
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg2); }
+::-webkit-scrollbar-thumb { background: var(--cyan); border-radius: 2px; opacity: 0.5; }
+
+/* Typography */
+.f-mono    { font-family: 'Share Tech Mono', monospace; }
+.f-display { font-family: 'Rajdhani', sans-serif; font-weight: 700; letter-spacing: 0.08em; }
+.f-body    { font-family: 'Exo 2', sans-serif; }
+
+/* Cards */
+.hcard {
+  background: var(--bg2);
+  border: 1px solid rgba(0,229,255,0.1);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.hcard:hover { border-color: rgba(0,229,255,0.3); box-shadow: 0 0 20px rgba(0,229,255,0.05); }
+
+/* Tags */
+.htag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 3px;
+  border: 1px solid;
+}
+.htag-cyan   { color: var(--cyan);   border-color: rgba(0,229,255,0.3);  background: rgba(0,229,255,0.06);  }
+.htag-teal   { color: var(--teal);   border-color: rgba(0,255,178,0.3);  background: rgba(0,255,178,0.06);  }
+.htag-amber  { color: var(--amber);  border-color: rgba(255,181,71,0.3);  background: rgba(255,181,71,0.06); }
+.htag-red    { color: var(--red);    border-color: rgba(255,61,90,0.3);   background: rgba(255,61,90,0.06);  }
+.htag-purple { color: var(--purple); border-color: rgba(183,148,244,0.3); background: rgba(183,148,244,0.06);}
+.htag-green  { color: var(--green);  border-color: rgba(74,222,128,0.3);  background: rgba(74,222,128,0.06); }
+
+/* Grid BG */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+@keyframes spin     { to { transform: rotate(360deg); } }
+@keyframes pulse    { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+@keyframes fadeIn   { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
+@keyframes glow     { 0%,100% { box-shadow: 0 0 6px var(--cyan); } 50% { box-shadow: 0 0 20px var(--cyan), 0 0 40px rgba(0,229,255,0.3); } }
+@keyframes scan     { from { transform: translateY(-100%); } to { transform: translateY(100vh); } }

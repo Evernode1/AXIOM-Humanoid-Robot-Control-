@@ -1,0 +1,15 @@
+# Core — required
+substrate-interface>=1.7.0
+numpy>=1.24.0
+python-dotenv>=1.0.0
+requests>=2.31.0
+
+# Unitree H1/G1 (optional — only if using Unitree robot)
+# pip install unitree_sdk2py
+
+# ROS2 (optional — only if using ROS2 robot)
+# Install via: sudo apt install python3-rclpy
+# or: pip install rclpy (if ROS2 is already installed)
+
+# IPFS (optional — for real telemetry upload)
+# pip install ipfshttpclient
